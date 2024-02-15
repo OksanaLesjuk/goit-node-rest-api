@@ -6,7 +6,7 @@ const {
     removeContact,
 } = require("../services/contactsServices")
 
-// const contacts = require("../db/contacts.json");
+
 const HttpError = require("../helpers/HttpError");
 
 
