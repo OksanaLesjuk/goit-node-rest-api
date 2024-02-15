@@ -47,12 +47,8 @@ const updateById = async (id, data) => {
     }
 
 
-    for (const key in data) {
-        // Оновлюємо тільки властивості, які містяться в прийнятому об'єкті
-        if (data.hasOwnProperty(key)) {
-            contacts[index][key] = data[key];
-        }
-    }
+
+    contacts[index] = { ...contacts[index], ...data };
 
 
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
