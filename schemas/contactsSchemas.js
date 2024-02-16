@@ -10,7 +10,9 @@ const updateContactSchema = Joi.object({
     name: Joi.string(),
     email: Joi.string().email(),
     phone: Joi.string().min(7).max(15),
-}).min(1) //що мінімум одна властивість має бути для оновленя
+}).min(1).messages({
+    'object.min': "Body must have at least one field",
+}); //що мінімум одна властивість має бути для оновленя
 
 
 module.exports = {
