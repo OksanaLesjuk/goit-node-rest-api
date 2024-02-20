@@ -1,16 +1,13 @@
-const {
+import {
     listContacts,
     getContactById,
     addContact,
     updateById,
     removeContact,
-} = require("../services/contactsServices")
+} from "../services/contactsServices.js"
 
 
-const HttpError = require("../helpers/HttpError");
-
-
-const { createContactSchema } = require("../schemas/contactsSchemas");
+import { HttpError } from "../helpers/HttpError.js";
 
 const getAllContacts = async (req, res, next) => {
     try {
@@ -75,7 +72,7 @@ const updateContact = async (req, res, next) => {
 
 };
 
-module.exports = {
+export {
     getAllContacts,
     getOneContact,
     deleteContact,

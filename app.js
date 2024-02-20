@@ -1,9 +1,14 @@
-const express = require("express");
-const morgan = require("morgan");
-const cors = require("cors");
-const mongoose = require('mongoose')
-const DB_HOST = "mongodb+srv://Oksana:WTm3pjROwKN4dlPK@cluster0.5jc5tr7.mongodb.net/db-contacts?retryWrites=true&w=majority"
-const contactsRouter = require("./routes/contactsRouter.js");
+import express from "express";
+import morgan from "morgan";
+import cors from "cors";
+
+import contactsRouter from "./routes/contactsRouter.js";
+
+import mongoose from 'mongoose';
+import { DB_HOST } from "./config.js";
+
+
+
 
 const app = express();
 mongoose.connect(DB_HOST)

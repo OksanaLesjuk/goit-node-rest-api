@@ -1,4 +1,4 @@
-const Joi = require("joi");
+import Joi from "joi";
 
 const createContactSchema = Joi.object({
     name: Joi.string().required(),
@@ -15,7 +15,7 @@ const updateContactSchema = Joi.object({
 }); //що мінімум одна властивість має бути для оновленя
 
 
-module.exports = {
+export {
     createContactSchema,
     updateContactSchema,
 }
