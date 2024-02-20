@@ -5,11 +5,11 @@ import cors from "cors";
 import contactsRouter from "./routes/contactsRouter.js";
 
 import mongoose from 'mongoose';
-import { DB_HOST } from "./config.js";
+// import { DB_HOST } from "./config.js";
 
 
 
-
+const { DB_HOST } = process.env;
 const app = express();
 mongoose.connect(DB_HOST)
   .then(() => {
