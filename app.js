@@ -1,10 +1,28 @@
-const express = require("express");
-const morgan = require("morgan");
-const cors = require("cors");
+import express from "express";
+import morgan from "morgan";
+import cors from "cors";
 
-const contactsRouter = require("./routes/contactsRouter.js");
+import contactsRouter from "./routes/contactsRouter.js";
 
+import mongoose from 'mongoose';
+import dotenv from 'dotenv'
+// import { DB_HOST } from "./config.js";
+
+
+dotenv.config()
+const { DB_HOST, PORT = 3000 } = process.env;
 const app = express();
+mongoose.connect(DB_HOST)
+  .then(() => {
+    console.log("Database connection successful")
+    app.listen(PORT),
+      console.log("Server is running. Use our API on port: 3000")
+
+  })
+  .catch(err => {
+    console.log(err.message),
+      process.exit(1)
+  })
 
 app.use(morgan("tiny"));
 app.use(cors());
@@ -21,6 +39,6 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
-app.listen(3000, () => {
-  console.log("Server is running. Use our API on port: 3000");
-});
+// app.listen(3000, () => {
+//   console.log("Server is running. Use our API on port: 3000");
+// });
