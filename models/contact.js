@@ -16,7 +16,8 @@ const contactSchema = new Schema({
         type: Boolean,
         default: false,
     },
-})
+},
+    { versionKey: false })
 //встановлюєм обробник на подію save
 contactSchema.post("save", handleMangoosErr)
 
