@@ -32,15 +32,19 @@ const User = model('user', userSchema);
 
 
 
-const usersJoiSchemas = Joi.object({
+const registerJoiSchemas = Joi.object({
 
     email: Joi.string().email().required(),
     password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
-    subscription: Joi.string().valid("starter", "pro", "business").default("starter")
+    // subscription: Joi.string().valid("starter", "pro", "business").default("starter"),
+})
 
+const loginJoiSchemas = Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
 })
 export {
     User,
-    usersJoiSchemas,
-
+    registerJoiSchemas,
+    loginJoiSchemas
 }
