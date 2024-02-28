@@ -11,7 +11,6 @@ const { SECRET_KEY } = process.env;
 
 const register = async (req, res, next) => {
     try {
-
         const { email, password } = req.body;
 
         //додаткова перевірка , чи є користувач з таким емайлом, для випадку, якщо портібно кастомний меседж
@@ -70,7 +69,7 @@ const getCurrent = async (req, res, next) => {
     try {
 
         const { email, subscription } = req.user;
-        console.log(email);
+
         res.status(200).json({ email, subscription })
 
     } catch (error) {
@@ -92,11 +91,25 @@ const logout = async (req, res, next) => {
     }
 }
 
+const updateUser = async (req, res, next) => {
+    try {
+        const { _id } = req.user;
+        console.log(_id);
+        const user = await User.findByIdAndUpdate(_id, req.body, { new: true })
+
+        res.status(200).json({ user })
+
+
+    } catch (error) {
+        next(error)
+    }
+}
 
 
 export {
     register,
     login,
     getCurrent,
-    logout
+    logout,
+    updateUser
 }

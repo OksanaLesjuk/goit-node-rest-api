@@ -43,8 +43,13 @@ const loginJoiSchemas = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().required(),
 })
+const subscriptionJoiSchemas = Joi.object({
+    subscription: Joi.string().valid("starter", "pro", "business").default("starter")
+})
+
 export {
     User,
     registerJoiSchemas,
-    loginJoiSchemas
+    loginJoiSchemas,
+    subscriptionJoiSchemas
 }
