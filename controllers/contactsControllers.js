@@ -5,7 +5,15 @@ import { HttpError } from "../helpers/HttpError.js";
 
 const getAllContacts = async (req, res, next) => {
     try {
-        const result = await Contact.find();
+        const { _id: owner } = req.user;
+        const { page = 1, limit = 10, favorite } = req.query;
+        const skip = (page - 1) * limit;
+
+
+        if (favorite !== 'true') {
+            return res.status(400).json({ message: 'Bad request. Parameter "favorite" should be set to "true".' });
+        }
+        const result = await Contact.find({ owner, favorite: true }, "", { skip, limit }).populate("owner", "email subscription");
         res.status(200).json(result)
     } catch (error) {
         next(error)
@@ -15,6 +23,7 @@ const getAllContacts = async (req, res, next) => {
 
 const getOneContact = async (req, res, next) => {
     try {
+
         const { contactId } = req.params;
         const result = await Contact.findById(contactId);
         if (!result) {
@@ -26,6 +35,7 @@ const getOneContact = async (req, res, next) => {
         next(error)
     }
 };
+
 
 const deleteContact = async (req, res, next) => {
     try {
@@ -43,9 +53,12 @@ const deleteContact = async (req, res, next) => {
 
 const createContact = async (req, res, next) => {
     try {
-        const result = await Contact.create(req.body)
+
+        const { _id: owner } = req.user;
+        const result = await Contact.create({ ...req.body, owner })
         res.status(201).json(result);
     } catch (error) {
+
         next(error)
 
     }
@@ -87,5 +100,6 @@ export {
     deleteContact,
     createContact,
     updateContact,
-    updateStatusContact
+    updateStatusContact,
+
 }

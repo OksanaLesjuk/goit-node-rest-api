@@ -3,6 +3,7 @@ import morgan from "morgan";
 import cors from "cors";
 
 import contactsRouter from "./routes/contactsRouter.js";
+import authRouter from "./routes/authRouter.js";
 
 import mongoose from 'mongoose';
 import dotenv from 'dotenv'
@@ -27,6 +28,8 @@ mongoose.connect(DB_HOST)
 app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
+
+app.use("/api/users", authRouter)
 
 app.use("/api/contacts", contactsRouter);
 
