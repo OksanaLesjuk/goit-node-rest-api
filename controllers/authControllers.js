@@ -47,7 +47,7 @@ const login = async (req, res, next) => {
             throw HttpError(401, "Email or password is wrong");
         }
 
-        const loginCompare = bcrypt.compare(password, user.password)
+        const loginCompare = await bcrypt.compare(password, user.password)
 
         if (!loginCompare) {
             throw HttpError(401, "Email or password is wrong");
@@ -56,7 +56,8 @@ const login = async (req, res, next) => {
             id: user._id,
         }
         const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '48h' });
-        res.json(token)
+        await User.findByIdAndUpdate(user._id, { token });
+        res.json({ token })
     }
     catch (error) {
         next(error)
@@ -64,7 +65,35 @@ const login = async (req, res, next) => {
 
 }
 
+const getCurrent = async (req, res, next) => {
+    try {
+        const { email } = req.user;
+        res.json({ email })
+
+    } catch (error) {
+        next(error)
+
+    }
+}
+
+
+const logout = async (req, res, next) => {
+    try {
+
+        const { _id } = req.user;
+        await User.findByIdAndUpdate(_id, { token: null })
+        res.status(20).json({ message: "No content" })
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+
 export {
     register,
-    login
+    login,
+    getCurrent,
+    logout
 }
