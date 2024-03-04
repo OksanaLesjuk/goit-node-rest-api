@@ -9,11 +9,14 @@ const getAllContacts = async (req, res, next) => {
         const { page = 1, limit = 10, favorite } = req.query;
         const skip = (page - 1) * limit;
 
-
-        if (favorite !== 'true') {
-            return res.status(400).json({ message: 'Bad request. Parameter "favorite" should be set to "true".' });
+        let query = { owner };
+        if (favorite === 'true' || favorite === 'false') {
+            query.favorite = favorite === 'true';
         }
-        const result = await Contact.find({ owner, favorite: true }, "", { skip, limit }).populate("owner", "email subscription");
+
+        const result = await Contact.find(query, "", { skip, limit }).populate("owner", "email subscription");
+
+
         res.status(200).json(result)
     } catch (error) {
         next(error)
@@ -23,12 +26,17 @@ const getAllContacts = async (req, res, next) => {
 
 const getOneContact = async (req, res, next) => {
     try {
-
+        const { _id: owner } = req.user;
         const { contactId } = req.params;
-        const result = await Contact.findById(contactId);
+
+        console.log(owner);
+        console.log(contactId)
+        const result = await Contact.findOne({ _id: contactId, owner });
         if (!result) {
             throw HttpError(404, "Not found")
         }
+
+
         res.status(200).json(result)
 
     } catch (error) {
@@ -39,11 +47,14 @@ const getOneContact = async (req, res, next) => {
 
 const deleteContact = async (req, res, next) => {
     try {
+        const { _id: owner } = req.user;
         const { contactId } = req.params;
-        const result = await Contact.findByIdAndDelete(contactId);
+        const result = await Contact.findByIdAndDelete({ _id: contactId, owner: owner });
         if (!result) {
             throw HttpError(404, "Not found")
         }
+
+
         res.status(200).json(result)
 
     } catch (error) {
@@ -66,11 +77,13 @@ const createContact = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
     try {
+        const { _id: owner } = req.user;
         const { contactId } = req.params;
-        const result = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
+        const result = await Contact.findByIdAndUpdate({ _id: contactId, owner: owner }, req.body, { new: true });
         if (!result) {
             throw HttpError(404, "Not found");
         }
+
         res.status(200).json(result)
 
     } catch (error) {
@@ -81,11 +94,14 @@ const updateContact = async (req, res, next) => {
 
 const updateStatusContact = async (req, res, next) => {
     try {
+        const { _id: owner } = req.user;
         const { contactId } = req.params;
-        const result = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
+        const result = await Contact.findByIdAndUpdate({ _id: contactId, owner: owner }, req.body, { new: true });
         if (!result) {
             throw HttpError(404, "Not found");
         }
+
+
         res.status(200).json(result)
 
     } catch (error) {
