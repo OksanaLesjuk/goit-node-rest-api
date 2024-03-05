@@ -1,7 +1,9 @@
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken";
 import 'dotenv/config.js'
-
+import gravatar from "gravatar"
+import path from 'path';
+import fs from "fs/promises"
 
 import { User } from "../models/user.js";
 import { HttpError } from "../helpers/HttpError.js";
@@ -9,10 +11,11 @@ import { HttpError } from "../helpers/HttpError.js";
 
 const { SECRET_KEY } = process.env;
 
+
 const register = async (req, res, next) => {
     try {
         const { email, password } = req.body;
-
+        console.log(req.body);
         //додаткова перевірка , чи є користувач з таким емайлом, для випадку, якщо портібно кастомний меседж
         const user = await User.findOne({ email });
         if (user) {
@@ -22,9 +25,9 @@ const register = async (req, res, next) => {
         //перед зберіганням хешуємо пароль
 
         const hashPasasword = await bcrypt.hash(password, 10);
-
+        const avatarURL = gravatar.url(email);
         //створюємо нового користувача
-        const newUser = await User.create({ ...req.body, password: hashPasasword });
+        const newUser = await User.create({ ...req.body, password: hashPasasword, avatarURL });
         res.status(201).json({
             "user": {
                 "email": newUser.email,
@@ -111,11 +114,34 @@ const updateUser = async (req, res, next) => {
     }
 }
 
+const updateAvatar = async (req, res, next) => {
+    try {
+        const { _id } = req.user;
+
+
+        await fs.rename(
+            req.file.path,
+            path.join(process.cwd(), "public/avatars", req.file.filename)
+        )
+        const avatarURL = path.join("avatars", req.file.filename);
+
+        const user = await User.findByIdAndUpdate(_id, { avatarURL }, { new: true })
+
+        res.status(200).json({ avatarURL })
+
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+
 
 export {
     register,
     login,
     getCurrent,
     logout,
-    updateUser
+    updateUser,
+    updateAvatar
 }
