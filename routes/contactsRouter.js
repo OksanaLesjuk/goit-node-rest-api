@@ -12,6 +12,7 @@ import { createContactSchema, updateContactSchema, updateFavoriteSchema } from "
 import { isValidId } from "../middlewares/isValidId.js";
 import { authenticate } from "../middlewares/authenticate.js";
 
+
 const contactsRouter = express.Router();
 
 contactsRouter.get("/", authenticate, getAllContacts);
