@@ -18,6 +18,6 @@ authRouter.get("/current", authenticate, getCurrent);
 
 authRouter.post("/logout", authenticate, logout);
 
-authRouter.patch("/avatars", authenticate, upload.single("avatars"), jimp, updateAvatar)
+authRouter.patch("/avatars", authenticate, upload.single("avatar"), jimp, updateAvatar)
 
 export default authRouter;
