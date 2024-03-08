@@ -10,7 +10,7 @@ const authRouter = express.Router();
 
 authRouter.patch("/", authenticate, validateBody(subscriptionJoiSchemas), updateUser);
 
-authRouter.post("/register", upload.single("avatars"), validateBody(registerJoiSchemas), register);
+authRouter.post("/register", upload.single("avatar"), validateBody(registerJoiSchemas), register);
 
 authRouter.post("/login", validateBody(loginJoiSchemas), login);
 
