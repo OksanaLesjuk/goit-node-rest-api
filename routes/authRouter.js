@@ -10,7 +10,7 @@ const authRouter = express.Router();
 
 authRouter.patch("/", authenticate, validateBody(subscriptionJoiSchemas), updateUser);
 
-authRouter.post("/register", upload.single("avatars"), validateBody(registerJoiSchemas), register);
+authRouter.post("/register", upload.single("avatar"), validateBody(registerJoiSchemas), register);
 
 authRouter.post("/login", validateBody(loginJoiSchemas), login);
 
@@ -18,6 +18,6 @@ authRouter.get("/current", authenticate, getCurrent);
 
 authRouter.post("/logout", authenticate, logout);
 
-authRouter.patch("/avatars", authenticate, upload.single("avatars"), jimp, updateAvatar)
+authRouter.patch("/avatars", authenticate, upload.single("avatar"), jimp, updateAvatar)
 
 export default authRouter;
